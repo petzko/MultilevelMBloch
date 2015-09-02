@@ -14,6 +14,9 @@ Marray<double,3> levichevi(3,3,3);
 
 void initialize(int, char ** );
 
+int getLINidx(std::vector<int> idx, int dim);
+std::vector<int> getVectorIdx(int dim, int LI);
+
 Marray<cdouble,2> fast_fourier(Marray<cdouble,2>,Marray<cdouble,2> , int);
 
 int main(int argc, char** argv){
@@ -190,6 +193,37 @@ i			then pairwise multiplicaiton
 
 }
 
+void getOffsets(int dim, std::vector<int> N, std::vector<int>& offsets)
+{
+	offsets.resize(dim,1);
+	int tmp = 1; 	
+	for(int j = dim-1; j >=0 ; j--)
+		offsets[j] = tmp;
+		tmp*=N[dim-1-j];
+
+	
+} // dim = 3 ->  offset[2] = 1, offset[1] = N[0], offset[0] = N[0]*N[1]
+
+
+int getLINidx(std::vector<int> idx,std::vector<int> offsets, int dim){
+	int I = 0;
+	for (int p = 0; j < dim; p++)
+		I+= idx[p]*offsets[p];
+	
+	return I; 
+}
+
+
+std::vector<int> getVectorIdx(int dim, int LI,std::vector<int> offsets){
+
+	std::vector<int> idx (dim,0); 
+	for(int p = 0; p<dim, p++)
+	{
+		idx[p] = LI / offsets[p];
+		LI = LI % offsets[p];
+	}	
+
+}
 
 
 void initialize(int argc, char** argv){
